@@ -9,7 +9,7 @@ SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Dino Yasuo")
 sound1=pygame.mixer.Sound("Hasagi.mp3")
-sound2=pygame.mixer.Sound("Death.mp3")
+
 RUNNING = [pygame.image.load(os.path.join("Assets/Dino", "DinoRun1.png")),
            pygame.image.load(os.path.join("Assets/Dino", "DinoRun2.png"))]
 JUMPING = pygame.image.load(os.path.join("Assets/Dino", "DinoJump.png"))
