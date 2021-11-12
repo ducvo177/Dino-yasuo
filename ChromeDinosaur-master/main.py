@@ -9,13 +9,17 @@ SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Dino Yasuo")
 sound1=pygame.mixer.Sound("Hasagi.mp3")
-
+sound2=pygame.mixer.Sound("Death.mp3")
+sound3=pygame.mixer.Sound("Soundtrack.mp3")
+sound1.set_volume(3.0)
+sound2.set_volume(2.0)
+sound3.set_volume(0.1)
 RUNNING = [pygame.image.load(os.path.join("Assets/Dino", "DinoRun1.png")),
            pygame.image.load(os.path.join("Assets/Dino", "DinoRun2.png"))]
 JUMPING = pygame.image.load(os.path.join("Assets/Dino", "DinoJump.png"))
 DUCKING = [pygame.image.load(os.path.join("Assets/Dino", "DinoDuck1.png")),
            pygame.image.load(os.path.join("Assets/Dino", "DinoDuck2.png"))]
-
+DEAD =     pygame.image.load(os.path.join("Assets/Dino", "DinoDead.png"))
 SMALL_CACTUS = [pygame.image.load(os.path.join("Assets/Object", "SmallCactus1.png")),
                 pygame.image.load(os.path.join("Assets/Object", "SmallCactus2.png")),
                 pygame.image.load(os.path.join("Assets/Object", "SmallCactus3.png"))]
@@ -41,6 +45,7 @@ class Dinosaur:
         self.duck_img = DUCKING
         self.run_img = RUNNING
         self.jump_img = JUMPING
+        self.dead=DEAD
 
         self.dino_duck = False
         self.dino_run = True
@@ -68,7 +73,7 @@ class Dinosaur:
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
-            pygame.mixer.Sound.play(sound1)
+            pygame.mixer.Channel(0).play(pygame.mixer.Sound(sound1))
         elif userInput[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
             self.dino_run = False
@@ -102,6 +107,7 @@ class Dinosaur:
             self.jump_vel = self.JUMP_VEL
 
     def draw(self, SCREEN):
+
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
 
@@ -224,8 +230,14 @@ def main():
             obstacle.draw(SCREEN)
             obstacle.update()
             if player.dino_rect.colliderect(obstacle.rect):
+
+
                 pygame.time.delay(2000)
+                pygame.mixer.Channel(2).play(pygame.mixer.Sound(sound2))
+                sound2.stop()
+
                 death_count += 1
+
                 menu(death_count)
 
         background()
@@ -243,6 +255,7 @@ def menu(death_count):
     global points
     run = True
     while run:
+        pygame.mixer.Channel(1).play(pygame.mixer.Sound(sound3))
         SCREEN.fill((255, 255, 255))
         font = pygame.font.Font('freesansbold.ttf', 30)
 
@@ -250,6 +263,7 @@ def menu(death_count):
 
             text = font.render("Press any Key to Start", True, (0, 0, 0))
         elif death_count > 0:
+
 
             text = font.render("Press any Key to Restart", True, (0, 0, 0))
             score = font.render("Your Score: " + str(points), True, (0, 0, 0))
