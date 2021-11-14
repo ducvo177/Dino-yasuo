@@ -14,12 +14,14 @@ sound3=pygame.mixer.Sound("Soundtrack.mp3")
 sound1.set_volume(3.0)
 sound2.set_volume(2.0)
 sound3.set_volume(0.1)
+#Hình ảnh khủng long
 RUNNING = [pygame.image.load(os.path.join("Assets/Dino", "DinoRun1.png")),
            pygame.image.load(os.path.join("Assets/Dino", "DinoRun2.png"))]
 JUMPING = pygame.image.load(os.path.join("Assets/Dino", "DinoJump.png"))
 DUCKING = [pygame.image.load(os.path.join("Assets/Dino", "DinoDuck1.png")),
            pygame.image.load(os.path.join("Assets/Dino", "DinoDuck2.png"))]
 DEAD =     pygame.image.load(os.path.join("Assets/Dino", "DinoDead.png"))
+#Chướng ngại vật
 SMALL_CACTUS = [pygame.image.load(os.path.join("Assets/Object", "SmallCactus1.png")),
                 pygame.image.load(os.path.join("Assets/Object", "SmallCactus2.png")),
                 pygame.image.load(os.path.join("Assets/Object", "SmallCactus3.png"))]
@@ -29,12 +31,12 @@ LARGE_CACTUS = [pygame.image.load(os.path.join("Assets/Object", "LargeCactus1.pn
 
 BIRD = [pygame.image.load(os.path.join("Assets/Dragon", "Bird1.png")),
         pygame.image.load(os.path.join("Assets/Dragon", "Bird2.png"))]
-
+#Background
 CLOUD = pygame.image.load(os.path.join("Assets/Other", "Cloud.png"))
 
 BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
 
-
+#Lớp Nhân Vật Khủng Long
 class Dinosaur:
     X_POS = 80
     Y_POS = 310
@@ -73,6 +75,7 @@ class Dinosaur:
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
+
             pygame.mixer.Channel(0).play(pygame.mixer.Sound(sound1))
         elif userInput[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
@@ -110,7 +113,7 @@ class Dinosaur:
 
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
-
+#Lớp Background
 class Cloud:
     def __init__(self):
         self.x = SCREEN_WIDTH + random.randint(800, 1000)
@@ -127,7 +130,7 @@ class Cloud:
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.x, self.y))
 
-
+#Lớp Chướng Ngại
 class Obstacle:
     def __init__(self, image, type):
         self.image = image
@@ -185,7 +188,7 @@ def main():
     font = pygame.font.Font('freesansbold.ttf', 20)
     obstacles = []
     death_count = 0
-
+    #Hàm tính điểm
     def score():
         global points, game_speed
         points += 1
@@ -196,7 +199,7 @@ def main():
         textRect = text.get_rect()
         textRect.center = (1000, 40)
         SCREEN.blit(text, textRect)
-
+    #Hàm Back  Ground
     def background():
         global x_pos_bg, y_pos_bg
         image_width = BG.get_width()
@@ -230,9 +233,7 @@ def main():
             obstacle.draw(SCREEN)
             obstacle.update()
             if player.dino_rect.colliderect(obstacle.rect):
-
-
-                pygame.time.delay(2000)
+                pygame.time.delay(500)
                 pygame.mixer.Channel(2).play(pygame.mixer.Sound(sound2))
                 sound2.stop()
 
@@ -278,6 +279,8 @@ def menu(death_count):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.quit()
+
             if event.type == pygame.KEYDOWN:
                 main()
 
